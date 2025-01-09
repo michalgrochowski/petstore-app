@@ -5,35 +5,54 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatDialogModule} from "@angular/material/dialog";
 import {StoreModule} from "@ngrx/store";
 import {reducers} from "./reducers";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {PetsEffects} from "./features/pets/pets.effects";
 import {EffectsModule} from "@ngrx/effects";
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
-import {HttpClient} from "@angular/common/http";
-import {HttpClientService} from "./services/http-client.service";
+import {ApiClientService} from "./services/api-client.service";
 import {PetsTableComponent} from "./components/pets-table/pets-table.component";
-import {AddEditPetDialogComponent} from "./modals/add-edit-pet-dialog/add-edit-pet-dialog.component";
-import { PetsTableRowComponent } from './components/pets-table-row/pets-table-row.component';
+import {AddEditPetDialogComponent} from "./dialogs/add-edit-pet-dialog/add-edit-pet-dialog.component";
+import {ApiClient} from "./services/api-client";
+import {provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
+import {MatCellDef, MatTableModule} from "@angular/material/table";
+import {MatSortModule} from "@angular/material/sort";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatSelectModule} from "@angular/material/select";
+import {CommonModule} from "@angular/common";
+import {MatChipsModule} from "@angular/material/chips";
+import {MatInputModule} from "@angular/material/input";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
     AppComponent,
     PetsTableComponent,
-    PetsTableRowComponent,
     AddEditPetDialogComponent,
-    PetsTableRowComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    CommonModule,
+    FormsModule,
     MatDialogModule,
     ReactiveFormsModule,
+    MatTableModule,
+    MatSortModule,
+    MatSelectModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+    MatChipsModule,
+    MatInputModule,
+    MatCellDef,
+    MatSnackBarModule,
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([PetsEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: false }),
   ],
   providers: [
-    {provide: HttpClient, useClass: HttpClientService},
+    provideHttpClient(withInterceptorsFromDi()),
+    {provide: ApiClient, useClass: ApiClientService},
   ],
   bootstrap: [AppComponent],
 })

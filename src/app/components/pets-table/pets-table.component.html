@@ -1,1 +1,76 @@
-<p>pets-table works!</p>
+<table mat-table
+       *ngIf="petsDataSource"
+       [dataSource]="petsDataSource"
+       matSort>
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+    <td mat-cell *matCellDef="let pet">
+      <span class="mat-cell-content">{{ pet.id }}</span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+    <td mat-cell *matCellDef="let pet">
+      <span class="mat-cell-content">{{ pet.name }}</span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="category">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
+    <td mat-cell *matCellDef="let pet">
+      <span class="mat-cell-content">{{ pet.category?.name }}</span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="photoUrls">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Photos</th>
+    <td mat-cell *matCellDef="let pet">
+      <mat-chip-set>
+        <mat-chip *ngFor="let url of pet.photoUrls;let index = index">
+          <a class="" [href]="url" target="_blank">Photo {{index + 1}}</a>
+        </mat-chip>
+      </mat-chip-set>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="tags">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tags</th>
+    <td mat-cell *matCellDef="let pet">
+      <span class="mat-cell-content">
+        <mat-chip-set>
+          <mat-chip *ngFor="let tag of pet.tags">{{tag.name}}</mat-chip>
+        </mat-chip-set>
+      </span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+    <td mat-cell *matCellDef="let pet">
+      <span class="mat-cell-content">{{ pet.status }}</span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Actions</th>
+    <td mat-cell *matCellDef="let pet">
+      <button class="" (click)="editPet(pet)">Edit</button>
+      <button class="" (click)="deletePet(pet)">Delete</button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let pet; columns: displayedColumns" class=""></tr>
+</table>
+
+<div
+  *ngIf="isLoadingPets$ | async"
+  class="pets-table__loader">
+  <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
+</div>
+
+<mat-paginator [pageSizeOptions]="[25, 50, 100]"
+               showFirstLastButtons
+               aria-label="Select page of pets">
+</mat-paginator>

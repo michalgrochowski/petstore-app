@@ -10,18 +10,9 @@ export interface State {
   loadingPets: boolean,
   petsLoaded: boolean,
   petsFailedToLoad: boolean,
-  addingPet: boolean,
-  petAdded: boolean,
-  petFailedToAdd: boolean,
-  loadingPet: boolean,
-  petLoaded: boolean,
-  petFailedToLoad: boolean,
-  updatingPet: boolean,
+  petUpdating: boolean,
   petUpdated: boolean,
   petFailedToUpdate: boolean,
-  deletingPet: boolean,
-  petDeleted: boolean,
-  petFailedToDelete: boolean,
 }
 
 export const adapter: EntityAdapter<Pet> = createEntityAdapter<Pet>({
@@ -33,18 +24,9 @@ export const initialState: State = {
   loadingPets: false,
   petsLoaded: false,
   petsFailedToLoad: false,
-  loadingPet: false,
-  petLoaded: false,
-  petFailedToLoad: false,
-  addingPet: false,
-  deletingPet: false,
-  petAdded: false,
-  petDeleted: false,
-  petFailedToAdd: false,
-  petFailedToDelete: false,
-  petFailedToUpdate: false,
+  petUpdating: false,
   petUpdated: false,
-  updatingPet: false
+  petFailedToUpdate: false,
 };
 
 export const reducer = createReducer(
@@ -64,40 +46,40 @@ export const reducer = createReducer(
     return {...state, loadingPets: false, petsFailedToLoad: true};
   }),
   on(PetsActions.loadPet, (state) => {
-    return {...state, loadingPets: true};
+    return {...state, petUpdating: true};
   }),
   on(PetsActions.petLoaded, (state, action) => {
-    return {...state, pets: adapter.upsertOne(action.pet, initialState.pets)}
+    return {...state, petUpdating: false, petUpdated: true, pets: adapter.upsertOne(action.pet, state.pets)}
   }),
   on(PetsActions.petFailedToLoad, (state) => {
-    return {...state, loadingPets: false, petFailedToLoad: true};
+    return {...state, loadingPets: false, petFailedToUpdate: true};
   }),
   on(PetsActions.addPet, (state) => {
-    return {...state, addingPet: true};
+    return {...state, petUpdating: true};
   }),
   on(PetsActions.petAdded, (state, action) => {
-    return {...state, addingPet: false, petAdded: true, pets: adapter.addOne(action.pet, initialState.pets)}
+    return {...state, petUpdating: false, petUpdated: true, pets: adapter.addOne(action.pet, state.pets)}
   }),
   on(PetsActions.petFailedToAdd, (state) => {
-    return {...state, addingPet: false, petFailedToAdd: true};
+    return {...state, petUpdating: false, petFailedToUpdate: true};
   }),
   on(PetsActions.editPet, (state) => {
-    return {...state, updatingPet: true};
+    return {...state, petUpdating: true};
   }),
   on(PetsActions.petEdited, (state, action) => {
-    return {...state, updatingPet: false, petUpdated: true, pets: adapter.upsertOne(action.pet, initialState.pets)}
+    return {...state, petUpdating: false, petUpdated: true, pets: adapter.upsertOne(action.pet, state.pets)}
   }),
   on(PetsActions.petFailedToEdit, (state) => {
-    return {...state, updatingPet: false, petFailedToUpdate: true};
+    return {...state, petUpdating: false, petFailedToUpdate: true};
   }),
   on(PetsActions.deletePet, (state) => {
-    return {...state, deletingPet: true};
+    return {...state, petUpdating: true};
   }),
   on(PetsActions.petDeleted, (state, action) => {
-    return {...state, deletingPet: false, petDeleted: true, pets: adapter.removeOne(action.pet.id, initialState.pets)}
+    return {...state, petUpdating: false, petUpdated: true, pets: adapter.removeOne(action.petId, state.pets)}
   }),
   on(PetsActions.petFailedToDelete, (state) => {
-    return {...state, deletingPet: false, petFailedToDelete: true};
+    return {...state, petUpdating: false, petFailedToUpdate: true};
   }),
 );
 
