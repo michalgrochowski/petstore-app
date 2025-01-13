@@ -1,0 +1,40 @@
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.dialog-container-title-container {
+  width: 100%;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  &::before {
+    height: 0;
+  }
+}
+
+.dialog-container-title-container__title {
+  margin: 0;
+  padding: 0;
+}
+
+.dialog-container-title-container__close-button {
+  margin-left: auto;
+}
+
+.dialog-container__spinner-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #1c1b1c;
+  opacity: 0.6;
+}
+
+mat-form-field {
+  width: 100%;
+}

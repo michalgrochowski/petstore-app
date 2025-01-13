@@ -1,0 +1,10 @@
+<mat-toolbar>
+  <h1 class="navbar__title"><mat-icon>pets</mat-icon><span class="navbar__title-text">Pet Store App</span></h1>
+  <div class="navbar__status-select-container">
+    <p class="navbar__status-select-label">Filter pets by status:</p>
+    <mat-select class="navbar__status-select" [value]="'available'" (selectionChange)="filterByStatus($event.value)">
+      <mat-option class="navbar__status-select-option" *ngFor="let status of statuses" [value]="status">{{status}}</mat-option>
+    </mat-select>
+  </div>
+  <button mat-flat-button class="navbar__add-new-button" (click)="addNewPet()"><mat-icon>add</mat-icon>Add new pet</button>
+</mat-toolbar>

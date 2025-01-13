@@ -21,14 +21,21 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatSelectModule} from "@angular/material/select";
 import {CommonModule} from "@angular/common";
 import {MatChipsModule} from "@angular/material/chips";
-import {MatInputModule} from "@angular/material/input";
+import {MatInput, MatInputModule} from "@angular/material/input";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatButton, MatFabButton, MatIconButton} from "@angular/material/button";
+import {MatIconModule} from "@angular/material/icon";
+import { NavbarComponent } from './components/navbar/navbar/navbar.component';
+import {MatToolbar} from "@angular/material/toolbar";
+import { PetDetailsDialogComponent } from './dialogs/pet-details-dialog/pet-details-dialog/pet-details-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PetsTableComponent,
     AddEditPetDialogComponent,
+    NavbarComponent,
+    PetDetailsDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,7 +55,13 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     MatSnackBarModule,
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([PetsEffects]),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: false }),
+    StoreDevtoolsModule.instrument({maxAge: 25, logOnly: false}),
+    MatButton,
+    MatInput,
+    MatIconButton,
+    MatIconModule,
+    MatToolbar,
+    MatFabButton
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),

@@ -1,0 +1,46 @@
+@use '@angular/material' as mat;
+
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+:root {
+  @include mat.select-overrides((
+    panel-background-color: orange,
+    enabled-trigger-text-color: red,
+  ));
+}
+
+.navbar__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.navbar__title-text {
+  margin-left: 1rem;
+}
+
+.navbar__add-new-button {
+  margin-left: 1rem;
+}
+
+.navbar__status-select-container {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar__status-select {
+  display: flex;
+  justify-content: center;
+  width: 10rem;
+  background-color: #5e5e64;
+  height: 1.6rem;
+  padding: 0.5rem;
+  border-radius: 20px;
+}
+
+.navbar__status-select-label {
+  font-size: 1rem;
+  margin-right: 1rem;
+}

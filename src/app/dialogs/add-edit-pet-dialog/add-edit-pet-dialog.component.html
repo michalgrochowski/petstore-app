@@ -1,1 +1,96 @@
-<p>add-edit-pet works!</p>
+<div mat-dialog-title class="dialog-container-title-container">
+  <h4 class="dialog-container-title-container__title">{{ dialogTitle }}</h4>
+  <button mat-icon-button type="button" class="dialog-container-title-container__close-button" (click)="close($event)"><mat-icon>cancel</mat-icon></button>
+</div>
+
+<div>
+  <form [formGroup]="petForm" (ngSubmit)="save()">
+    <div mat-dialog-content class="dialog-container">
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input
+          matInput
+          type="text"
+          placeholder="Name"
+          id="name"
+          formControlName="name"
+          [class.is-invalid]="submitAttempt && petForm.get('name')?.invalid"
+        />
+        <p class="" *ngIf="submitAttempt && petForm.get('name')?.errors">{{petForm.get('name')?.errors}}</p>
+      </mat-form-field>
+      <ng-container formGroupName="category">
+        <mat-form-field>
+          <mat-label>Category</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Category"
+            id="category"
+            formControlName="name"
+            [class.is-invalid]="submitAttempt && petForm.get('category.name')?.invalid"
+          />
+          <p class="" *ngIf="submitAttempt && petForm.get('category')?.errors">{{petForm.get('category')?.errors}}</p>
+        </mat-form-field>
+      </ng-container>
+      <mat-form-field>
+        <mat-label>Photo Urls</mat-label>
+        <mat-chip-grid #photoUrlsChipGrid aria-label="Add photo url" formArrayName="photoUrls">
+          <mat-chip-row *ngFor="let photo of petForm.get('photoUrls')?.value; let index = index"
+                        [editable]="true"
+                        (removed)="removePhotoUrl(index)">
+            {{photo}}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        </mat-chip-grid>
+        <input
+          placeholder="New photo url..."
+          [matChipInputFor]="photoUrlsChipGrid"
+          (matChipInputTokenEnd)="addPhotoUrl($event)"
+        />
+        <p class="" *ngIf="submitAttempt && petForm.get('photoUrls')?.errors">{{petForm.get('photoUrls')?.errors}}</p>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Tags</mat-label>
+        <mat-chip-grid #tagsChipGrid aria-label="Add tag" formArrayName="tags">
+          <mat-chip-row *ngFor="let tag of petForm.get('tags')?.value; let index = index"
+                        [editable]="true"
+                        (removed)="removeTag(index)">
+            {{tag?.name}}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        </mat-chip-grid>
+        <input
+          placeholder="New tag..."
+          [matChipInputFor]="tagsChipGrid"
+          (matChipInputTokenEnd)="addTag($event)"
+        />
+        <p class="" *ngIf="submitAttempt && petForm.get('tags')?.errors">{{petForm.get('tags')?.errors}}</p>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Status</mat-label>
+        <mat-select
+          id="status"
+          formControlName="status"
+          [class.is-invalid]="submitAttempt && petForm.get('status')?.invalid"
+        >
+          <mat-option *ngFor="let status of statuses" [value]="status">{{status}}</mat-option>
+        </mat-select>
+        <p class="" *ngIf="submitAttempt && petForm.get('status')?.errors">{{petForm.get('status')?.errors}}</p>
+      </mat-form-field>
+    </div>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="" type="button" (click)="close($event)" mat-raised-button>Cancel</button>
+  <button class="" type="button" (click)="save()" mat-flat-button>{{data.isNewPet ? 'Add' : 'Save'}}</button>
+</div>
+
+<div class="dialog-container__spinner-container" *ngIf="(isSavingPet$ | async) && (savingPetFailed$ | async)">
+  <p class="">Saving Pet</p>
+  <mat-spinner></mat-spinner>
+</div>

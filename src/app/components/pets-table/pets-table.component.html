@@ -1,68 +1,69 @@
-<table mat-table
+<mat-table
        *ngIf="petsDataSource"
        [dataSource]="petsDataSource"
        matSort>
   <ng-container matColumnDef="id">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-    <td mat-cell *matCellDef="let pet">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+    <mat-cell *matCellDef="let pet">
       <span class="mat-cell-content">{{ pet.id }}</span>
-    </td>
+    </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-    <td mat-cell *matCellDef="let pet">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+    <mat-cell *matCellDef="let pet">
       <span class="mat-cell-content">{{ pet.name }}</span>
-    </td>
+    </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="category">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
-    <td mat-cell *matCellDef="let pet">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Category</mat-header-cell>
+    <mat-cell *matCellDef="let pet">
       <span class="mat-cell-content">{{ pet.category?.name }}</span>
-    </td>
+    </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="photoUrls">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Photos</th>
-    <td mat-cell *matCellDef="let pet">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Photos</mat-header-cell>
+    <mat-cell *matCellDef="let pet">
       <mat-chip-set>
-        <mat-chip *ngFor="let url of pet.photoUrls;let index = index">
-          <a class="" [href]="url" target="_blank">Photo {{index + 1}}</a>
+        <mat-chip *ngFor="let url of pet.photoUrls;let index = index" mat-chip>
+          <a class="pets-table__chip-link" [href]="url" target="_blank">Photo {{index + 1}}</a>
         </mat-chip>
       </mat-chip-set>
-    </td>
+    </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="tags">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tags</th>
-    <td mat-cell *matCellDef="let pet">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Tags</mat-header-cell>
+    <mat-cell *matCellDef="let pet">
       <span class="mat-cell-content">
         <mat-chip-set>
-          <mat-chip *ngFor="let tag of pet.tags">{{tag.name}}</mat-chip>
+          <mat-chip *ngFor="let tag of pet.tags" mat-chip>{{tag?.name}}</mat-chip>
         </mat-chip-set>
       </span>
-    </td>
+    </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="status">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-    <td mat-cell *matCellDef="let pet">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+    <mat-cell *matCellDef="let pet">
       <span class="mat-cell-content">{{ pet.status }}</span>
-    </td>
+    </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Actions</th>
-    <td mat-cell *matCellDef="let pet">
-      <button class="" (click)="editPet(pet)">Edit</button>
-      <button class="" (click)="deletePet(pet)">Delete</button>
-    </td>
+    <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+    <mat-cell *matCellDef="let pet">
+      <button mat-button (click)="openPetDetails(pet)"><mat-icon>info</mat-icon>Details</button>
+      <button mat-button (click)="editPet(pet)"><mat-icon>edit</mat-icon>Edit</button>
+      <button mat-button (click)="deletePet(pet)"><mat-icon>delete</mat-icon>Delete</button>
+    </mat-cell>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let pet; columns: displayedColumns" class=""></tr>
-</table>
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row mat-row *matRowDef="let pet; columns: displayedColumns" class=""></mat-row>
+</mat-table>
 
 <div
   *ngIf="isLoadingPets$ | async"

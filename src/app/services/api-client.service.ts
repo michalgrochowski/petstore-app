@@ -14,7 +14,7 @@ export class ApiClientService implements ApiClient {
   constructor(private readonly httpClient: HttpClient) {
   }
 
-  addPet(pet: Pet): Observable<any> {
+  addPet(pet: Pet): Observable<Pet> {
     return this.httpClient.post<Pet>(this.apiUrl, JSON.stringify(pet));
   }
 
@@ -23,7 +23,7 @@ export class ApiClientService implements ApiClient {
   }
 
   editPet(pet: Pet): Observable<Pet> {
-    return this.httpClient.put<Pet>(this.apiUrl + `/${pet.id}`, JSON.stringify(pet));
+    return this.httpClient.put<Pet>(this.apiUrl, pet);
   }
 
   getPet(petId: number): Observable<Pet> {

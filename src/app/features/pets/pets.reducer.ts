@@ -13,6 +13,8 @@ export interface State {
   petUpdating: boolean,
   petUpdated: boolean,
   petFailedToUpdate: boolean,
+  petDeleted: number | null;
+  petAdded: Pet | null;
 }
 
 export const adapter: EntityAdapter<Pet> = createEntityAdapter<Pet>({
@@ -27,6 +29,8 @@ export const initialState: State = {
   petUpdating: false,
   petUpdated: false,
   petFailedToUpdate: false,
+  petDeleted: null,
+  petAdded: null,
 };
 
 export const reducer = createReducer(
@@ -42,7 +46,7 @@ export const reducer = createReducer(
       petsLoaded: true
     };
   }),
-  on(PetsActions.petsFailedToLoad, (state, action) => {
+  on(PetsActions.petsFailedToLoad, (state) => {
     return {...state, loadingPets: false, petsFailedToLoad: true};
   }),
   on(PetsActions.loadPet, (state) => {
@@ -58,7 +62,7 @@ export const reducer = createReducer(
     return {...state, petUpdating: true};
   }),
   on(PetsActions.petAdded, (state, action) => {
-    return {...state, petUpdating: false, petUpdated: true, pets: adapter.addOne(action.pet, state.pets)}
+    return {...state, petUpdating: false, petUpdated: true, pets: adapter.addOne(action.pet, state.pets), petAdded: action.pet}
   }),
   on(PetsActions.petFailedToAdd, (state) => {
     return {...state, petUpdating: false, petFailedToUpdate: true};
@@ -76,11 +80,11 @@ export const reducer = createReducer(
     return {...state, petUpdating: true};
   }),
   on(PetsActions.petDeleted, (state, action) => {
-    return {...state, petUpdating: false, petUpdated: true, pets: adapter.removeOne(action.petId, state.pets)}
+    return {...state, petUpdating: false, petUpdated: true, pets: adapter.removeOne(action.petId, state.pets), petDeleted: action.petId}
   }),
   on(PetsActions.petFailedToDelete, (state) => {
     return {...state, petUpdating: false, petFailedToUpdate: true};
   }),
 );
 
-export const {selectAll} = adapter.getSelectors();
+export const {selectAll, selectEntities} = adapter.getSelectors();

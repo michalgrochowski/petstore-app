@@ -1,4 +1,4 @@
-import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import { createActionGroup, props } from '@ngrx/store';
 import {Pet} from "../../models/pet";
 import {PetStatus} from "../../enums/pet-status";
 

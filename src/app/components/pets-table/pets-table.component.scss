@@ -8,4 +8,47 @@
   left: 0;
   right: 0;
   z-index: 1001;
+  background-color: #1c1b1c;
+  opacity: 0.6;
+}
+
+.pets-table__chip-link {
+  font-weight: 500;
+  font-style: normal;
+  text-decoration: none;
+  color: var(--mdc-chip-label-text-color, var(--mat-sys-on-surface-variant));
+  cursor: pointer;
+}
+
+.mat-column-id {
+  flex: 0 0 10%;
+}
+
+.mat-column-name {
+  flex: 0 0 20%;
+}
+
+.mat-column-category {
+  flex: 0 0 10%;
+}
+
+.mat-column-photoUrls {
+  flex: 0 0 20%;
+}
+
+.mat-column-tags {
+  flex: 0 0 20%;
+}
+
+.mat-column-status {
+  flex: 0 0 5%;
+}
+
+.mat-column-actions {
+  flex: 0 0 15%;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  background-color: #3a3939;
+  transition: 0.3s all;
 }
