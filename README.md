@@ -17,7 +17,8 @@ Main functionalities are:
 - Deleting selected record
 - Displaying record details in a dialog
 - Sorting the table by every column
-- Filtering the table by "name"
+- Limit records showing in the table with pagination
+- Filtering the table by "name" property of records
 
 ## Installation
 
@@ -29,7 +30,7 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The appli
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Teh you can simply upload it on your server of choice to see the running app.
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Then you can simply upload it on your server of choice to see the running app.
 
 ## Linter
 
@@ -45,4 +46,4 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 
 ## Live demo
 
-You can check the app here [here]()
+You can check the app [here](https://michalgrochowski.github.io/petstore-app/).
