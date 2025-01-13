@@ -1,18 +1,30 @@
-# PetstoreApp
+# Pet Store App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.3.
+Small CRUD application that displays data from API in a table and allows to add, modify and delete records.
+
+Built with:
+- Angular
+- Angular Material
+- RXJS
+- NGRX
+
+Includes custom Material theme and is mostly composed of Material components. It also has 2 themes that you can toggle between.
+
+## Installation
+
+Clone this repository and open a terminal in the repository directory, then simply run `npm install` command and wait for all packages to install.
 
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Teh you can simply upload it on your server of choice to see the running app.
+
+## Linter
+
+Run `ng lint` to lint the code and check if there are any errors. Linting using ESLint.
 
 ## Running unit tests
 
@@ -22,6 +34,6 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
-## Further help
+## Live demo
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+You can check the app here [here]()
