@@ -10,6 +10,15 @@ Built with:
 
 Includes custom Material theme and is mostly composed of Material components. It also has 2 themes that you can toggle between.
 
+Main functionalities are:
+- Displaying records from API filtered by status
+- Adding new record
+- Editing existing record
+- Deleting selected record
+- Displaying record details in a dialog
+- Sorting the table by every column
+- Filtering the table by "name"
+
 ## Installation
 
 Clone this repository and open a terminal in the repository directory, then simply run `npm install` command and wait for all packages to install.
