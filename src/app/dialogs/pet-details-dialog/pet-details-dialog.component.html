@@ -1,1 +1,47 @@
-<p>pet-details-dialog works!</p>
+<div mat-dialog-title class="dialog-container-title-container">
+  <h4 class="dialog-container-title-container__title">{{ dialogTitle }}: </h4>
+  <button mat-icon-button type="button" class="dialog-container-title-container__close-button" (click)="close()"><mat-icon>cancel</mat-icon></button>
+</div>
+<div mat-dialog-content class="dialog-container">
+  <section class="dialog-container__info-row">
+    <h6 class="dialog-container__info-row-label">ID: </h6>
+    <p class="dialog-container__info-row-content">{{data.pet.id ? data.pet.id : '-'}}</p>
+  </section>
+  <section class="dialog-container__info-row">
+    <h6 class="dialog-container__info-row-label">Name: </h6>
+    <p class="dialog-container__info-row-content">{{data.pet.name ? data.pet.name : '-'}}</p>
+  </section>
+  <section class="dialog-container__info-row">
+    <h6 class="dialog-container__info-row-label">Category: </h6>
+    <p class="dialog-container__info-row-content">{{data.pet.category ? data.pet.category.name : '-'}}</p>
+  </section>
+  <section class="dialog-container__info-row">
+    <h6 class="dialog-container__info-row-label">Photo Urls: </h6>
+    <mat-chip-set *ngIf="data.pet.photoUrls?.length">
+      <mat-chip *ngFor="let url of data.pet.photoUrls; let index = index" mat-chip [matTooltip]="url" class="pets-table__chip">
+        <a class="pets-table__chip-link" [href]="url" target="_blank">Photo {{index + 1}}</a>
+      </mat-chip>
+    </mat-chip-set>
+    <p *ngIf="!data.pet.photoUrls?.length" class="dialog-container__info-row-content">-</p>
+  </section>
+  <section class="dialog-container__info-row">
+    <h6 class="dialog-container__info-row-label">Tags: </h6>
+    <mat-chip-set *ngIf="data.pet.tags?.length">
+      <mat-chip *ngFor="let tag of data.pet.tags" mat-chip><span class="pets-table__chip-text">{{tag?.name}}</span></mat-chip>
+    </mat-chip-set>
+    <p *ngIf="!data.pet.tags?.length" class="dialog-container__info-row-content">-</p>
+  </section>
+  <section class="dialog-container__info-row">
+    <h6 class="dialog-container__info-row-label">Status: </h6>
+    <p class="dialog-container__info-row-content">{{data.pet.status | titlecase}}</p>
+  </section>
+</div>
+<div mat-dialog-actions>
+  <div class="">
+    <button
+      (click)="close()"
+      mat-flat-button>
+      Close
+    </button>
+  </div>
+</div>

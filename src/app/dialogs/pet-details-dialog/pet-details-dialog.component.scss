@@ -1,0 +1,91 @@
+.mat-mdc-dialog-surface {
+  background-color: var(--mat-sys-primary-container);
+}
+
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.dialog-container__info-row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+}
+
+.dialog-container__info-row-label {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0.5rem 1rem 0.5rem 0;
+  padding: 0;
+  width: 8rem;
+}
+
+.dialog-container__info-row-content {
+  font-size: 1.3rem;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  width: 20rem;
+  overflow: hidden;
+}
+
+.dialog-container-title-container {
+  width: 100%;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  &::before {
+    height: 0;
+  }
+}
+
+.dialog-container-title-container__title {
+  margin: 0;
+  padding: 0;
+}
+
+.dialog-container-title-container__close-button {
+  margin-left: auto;
+}
+
+.mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) {
+  background-color: var(--mat-sys-on-surface-variant);
+}
+
+.dialog__chip-text {
+  color: var(--mat-sys-inverse-on-surface)
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  background-color: var(--mat-sys-surface-bright);
+  transition: 0.3s all;
+}
+
+.mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) {
+  background-color: var(--mat-sys-on-surface-variant);
+}
+
+.pets-table__chip-text {
+  color: var(--mat-sys-inverse-on-surface)
+}
+
+.pets-table__chip {
+  background-color: var(--mat-sys-surface-variant);
+}
+
+.pets-table__chip-link {
+  font-weight: 500;
+  font-style: normal;
+  text-decoration: none;
+  color: var(--mat-sys-inverse-on-surface);
+  cursor: pointer;
+}
+

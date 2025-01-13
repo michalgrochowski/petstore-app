@@ -146,6 +146,7 @@ export class AddEditPetDialogComponent implements OnInit, OnDestroy {
       tags: new FormArray([]),
       status: [PetStatus.Available, Validators.required],
     });
+    this.petForm.get('photoUrls')?.addValidators(Validators.pattern(/^(https?|ftp)?(:\/\/)?[^\s/$.?#].[^\s]*$/));
   }
 
   private convertPetToFormData(pet: Pet): any {
@@ -160,5 +161,6 @@ export class AddEditPetDialogComponent implements OnInit, OnDestroy {
       tags: this.data.pet.tags ? new FormArray(this.data.pet.tags.map(tag => new FormControl(tag))) : new FormArray([]),
       status: [pet.status ?? PetStatus.Available, Validators.required],
     });
+    this.petForm.get('photoUrls')?.addValidators(Validators.pattern(/^(https?|ftp)?(:\/\/)?[^\s/$.?#].[^\s]*$/));
   }
 }

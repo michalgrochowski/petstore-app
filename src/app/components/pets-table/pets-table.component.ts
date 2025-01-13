@@ -13,6 +13,7 @@ import {PetsActions} from "../../features/pets/pets.actions";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/confirmation-dialog.component";
+import {PetDetailsDialogComponent} from "../../dialogs/pet-details-dialog/pet-details-dialog.component";
 
 @Component({
   selector: 'app-pets-table',
@@ -41,6 +42,7 @@ export class PetsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   pets$: Observable<Pet[]> = this.store$.pipe(select(getAllPets), takeUntil(this.unsubscribe$));
   isLoadingPets$: Observable<boolean> = this.store$.select('pets', 'loadingPets').pipe(takeUntil(this.unsubscribe$));
+  petsFailedToLoad$: Observable<boolean> = this.store$.select('pets', 'petsFailedToLoad').pipe(takeUntil(this.unsubscribe$));
   wasPetDeleted$: Observable<number | null> = this.store$.select('pets', 'petDeleted').pipe(takeUntil(this.unsubscribe$));
   wasPetAdded$: Observable<Pet | null> = this.store$.select('pets', 'petAdded').pipe(takeUntil(this.unsubscribe$));
   petError$: Observable<any> = this.store$.select('pets', 'petRequestError').pipe(takeUntil(this.unsubscribe$));
@@ -89,7 +91,12 @@ export class PetsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openPetDetails(pet: Pet): void {
-    console.log(pet)
+    this.dialog.open(PetDetailsDialogComponent, {
+      data: {
+        pet: pet,
+      },
+      width: '600px'
+    });
   }
 
   editPet(pet: Pet): void {
