@@ -12,11 +12,15 @@
   opacity: 0.6;
 }
 
+.pets-table__chip {
+  background-color: var(--mat-sys-surface-variant);
+}
+
 .pets-table__chip-link {
   font-weight: 500;
   font-style: normal;
   text-decoration: none;
-  color: var(--mdc-chip-label-text-color, var(--mat-sys-on-surface-variant));
+  color: var(--mat-sys-inverse-on-surface);
   cursor: pointer;
 }
 
@@ -49,6 +53,14 @@
 }
 
 .mat-mdc-row:hover .mat-mdc-cell {
-  background-color: #3a3939;
+  background-color: var(--mat-sys-surface-bright);
   transition: 0.3s all;
+}
+
+.mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) {
+  background-color: var(--mat-sys-on-surface-variant);
+}
+
+.pets-table__chip-text {
+  color: var(--mat-sys-inverse-on-surface)
 }

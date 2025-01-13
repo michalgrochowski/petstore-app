@@ -1,0 +1,21 @@
+<div mat-dialog-title class="dialog-container-title-container">
+  <h4 class="dialog-container-title-container__title">{{ data.title }}</h4>
+  <button mat-icon-button type="button" class="dialog-container-title-container__close-button" (click)="cancel()"><mat-icon>cancel</mat-icon></button>
+</div>
+<div mat-dialog-content class="dialog-container">
+  <h6 class="dialog-container__text">{{ data.text }}</h6>
+</div>
+<div mat-dialog-actions>
+  <div class="">
+    <button
+      (click)="cancel()"
+      mat-button>
+      Cancel
+    </button>
+    <button
+      (click)="confirm()"
+      mat-flat-button>
+      {{ data.confirmButtonText || 'Confirm' }}
+    </button>
+  </div>
+</div>

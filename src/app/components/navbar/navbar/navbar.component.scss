@@ -1,11 +1,7 @@
 @use '@angular/material' as mat;
 
-// Customize the entire app. Change :root to your selector if you want to scope the styles.
-:root {
-  @include mat.select-overrides((
-    panel-background-color: orange,
-    enabled-trigger-text-color: red,
-  ));
+.mat-toolbar {
+  background-color: var(--mat-sys-primary-container);
 }
 
 .navbar__title {
@@ -34,13 +30,25 @@
   display: flex;
   justify-content: center;
   width: 10rem;
-  background-color: #5e5e64;
+  background-color: var(--mat-sys-surface-variant);
   height: 1.6rem;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   border-radius: 20px;
 }
 
 .navbar__status-select-label {
   font-size: 1rem;
   margin-right: 1rem;
+}
+
+.navbar__theme-switcher {
+  margin-left: 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar__theme-switcher-icon {
+  margin: 0 0.5rem
 }

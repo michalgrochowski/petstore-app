@@ -27,7 +27,10 @@ import {MatButton, MatFabButton, MatIconButton} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import { NavbarComponent } from './components/navbar/navbar/navbar.component';
 import {MatToolbar} from "@angular/material/toolbar";
-import { PetDetailsDialogComponent } from './dialogs/pet-details-dialog/pet-details-dialog/pet-details-dialog.component';
+import { PetDetailsDialogComponent } from './dialogs/pet-details-dialog/pet-details-dialog.component';
+import {ConfirmationDialogComponent} from "./dialogs/confirmation-dialog/confirmation-dialog.component";
+import {MatTooltipModule} from "@angular/material/tooltip";
+import {MatSlideToggle} from "@angular/material/slide-toggle";
 
 @NgModule({
   declarations: [
@@ -36,6 +39,7 @@ import { PetDetailsDialogComponent } from './dialogs/pet-details-dialog/pet-deta
     AddEditPetDialogComponent,
     NavbarComponent,
     PetDetailsDialogComponent,
+    ConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,7 +65,9 @@ import { PetDetailsDialogComponent } from './dialogs/pet-details-dialog/pet-deta
     MatIconButton,
     MatIconModule,
     MatToolbar,
-    MatFabButton
+    MatFabButton,
+    MatTooltipModule,
+    MatSlideToggle
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),

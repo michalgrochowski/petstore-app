@@ -1,13 +1,10 @@
-.mat-mdc-dialog-surface {
-  background-color: var(--mat-sys-primary-container);
-}
-
 .dialog-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
+  min-height: 5rem;
 }
 
 .dialog-container-title-container {
@@ -31,6 +28,13 @@
   margin-left: auto;
 }
 
+.dialog-container__text {
+  width: 100%;
+  margin-right: auto;
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
 .dialog-container__spinner-container {
   display: flex;
   flex-direction: column;
@@ -46,19 +50,6 @@
   z-index: 1000;
 }
 
-.dialog-container__spinner-container-text {
-  font-size: 1.4rem;
-}
-
 mat-form-field {
   width: 100%;
 }
-
-.mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) {
-  background-color: var(--mat-sys-on-surface-variant);
-}
-
-.dialog__chip-text {
-  color: var(--mat-sys-inverse-on-surface)
-}
-

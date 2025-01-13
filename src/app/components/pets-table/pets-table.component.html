@@ -27,7 +27,7 @@
     <mat-header-cell *matHeaderCellDef mat-sort-header>Photos</mat-header-cell>
     <mat-cell *matCellDef="let pet">
       <mat-chip-set>
-        <mat-chip *ngFor="let url of pet.photoUrls;let index = index" mat-chip>
+        <mat-chip *ngFor="let url of pet.photoUrls; let index = index" mat-chip [matTooltip]="url" class="pets-table__chip">
           <a class="pets-table__chip-link" [href]="url" target="_blank">Photo {{index + 1}}</a>
         </mat-chip>
       </mat-chip-set>
@@ -39,7 +39,7 @@
     <mat-cell *matCellDef="let pet">
       <span class="mat-cell-content">
         <mat-chip-set>
-          <mat-chip *ngFor="let tag of pet.tags" mat-chip>{{tag?.name}}</mat-chip>
+          <mat-chip *ngFor="let tag of pet.tags" mat-chip><span class="pets-table__chip-text">{{tag?.name}}</span></mat-chip>
         </mat-chip-set>
       </span>
     </mat-cell>
@@ -48,7 +48,7 @@
   <ng-container matColumnDef="status">
     <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
     <mat-cell *matCellDef="let pet">
-      <span class="mat-cell-content">{{ pet.status }}</span>
+      <span class="mat-cell-content">{{ pet.status | titlecase }}</span>
     </mat-cell>
   </ng-container>
 

@@ -7,7 +7,7 @@ import {PetStatus} from "./enums/pet-status";
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  
+  standalone: false,
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
@@ -15,6 +15,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store$.dispatch(PetsActions.loadPets({status: PetStatus.Available}))
+    this.store$.dispatch(PetsActions.loadPets({status: PetStatus.Available}));
   }
 }

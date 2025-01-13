@@ -7,6 +7,18 @@
   <form [formGroup]="petForm" (ngSubmit)="save()">
     <div mat-dialog-content class="dialog-container">
       <mat-form-field>
+        <mat-label>ID</mat-label>
+        <input
+          matInput
+          type="text"
+          placeholder="ID"
+          id="id"
+          formControlName="id"
+          [readonly]="!data.isNewPet"
+          [class.is-invalid]="submitAttempt && petForm.get('id')?.invalid"
+        />
+      </mat-form-field>
+      <mat-form-field>
         <mat-label>Name</mat-label>
         <input
           matInput
@@ -16,7 +28,6 @@
           formControlName="name"
           [class.is-invalid]="submitAttempt && petForm.get('name')?.invalid"
         />
-        <p class="" *ngIf="submitAttempt && petForm.get('name')?.errors">{{petForm.get('name')?.errors}}</p>
       </mat-form-field>
       <ng-container formGroupName="category">
         <mat-form-field>
@@ -29,7 +40,6 @@
             formControlName="name"
             [class.is-invalid]="submitAttempt && petForm.get('category.name')?.invalid"
           />
-          <p class="" *ngIf="submitAttempt && petForm.get('category')?.errors">{{petForm.get('category')?.errors}}</p>
         </mat-form-field>
       </ng-container>
       <mat-form-field>
@@ -38,9 +48,9 @@
           <mat-chip-row *ngFor="let photo of petForm.get('photoUrls')?.value; let index = index"
                         [editable]="true"
                         (removed)="removePhotoUrl(index)">
-            {{photo}}
+            <span class="dialog__chip-text">{{photo}}</span>
             <button matChipRemove>
-              <mat-icon>cancel</mat-icon>
+              <mat-icon class="dialog__chip-text">cancel</mat-icon>
             </button>
           </mat-chip-row>
         </mat-chip-grid>
@@ -49,7 +59,6 @@
           [matChipInputFor]="photoUrlsChipGrid"
           (matChipInputTokenEnd)="addPhotoUrl($event)"
         />
-        <p class="" *ngIf="submitAttempt && petForm.get('photoUrls')?.errors">{{petForm.get('photoUrls')?.errors}}</p>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Tags</mat-label>
@@ -57,9 +66,9 @@
           <mat-chip-row *ngFor="let tag of petForm.get('tags')?.value; let index = index"
                         [editable]="true"
                         (removed)="removeTag(index)">
-            {{tag?.name}}
+            <span class="dialog__chip-text">{{tag?.name}}</span>
             <button matChipRemove>
-              <mat-icon>cancel</mat-icon>
+              <mat-icon class="dialog__chip-text">cancel</mat-icon>
             </button>
           </mat-chip-row>
         </mat-chip-grid>
@@ -68,7 +77,6 @@
           [matChipInputFor]="tagsChipGrid"
           (matChipInputTokenEnd)="addTag($event)"
         />
-        <p class="" *ngIf="submitAttempt && petForm.get('tags')?.errors">{{petForm.get('tags')?.errors}}</p>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Status</mat-label>
@@ -79,7 +87,6 @@
         >
           <mat-option *ngFor="let status of statuses" [value]="status">{{status}}</mat-option>
         </mat-select>
-        <p class="" *ngIf="submitAttempt && petForm.get('status')?.errors">{{petForm.get('status')?.errors}}</p>
       </mat-form-field>
     </div>
   </form>
@@ -91,6 +98,6 @@
 </div>
 
 <div class="dialog-container__spinner-container" *ngIf="(isSavingPet$ | async) && (savingPetFailed$ | async)">
-  <p class="">Saving Pet</p>
+  <p class="dialog-container__spinner-container-text">Saving Pet</p>
   <mat-spinner></mat-spinner>
 </div>
