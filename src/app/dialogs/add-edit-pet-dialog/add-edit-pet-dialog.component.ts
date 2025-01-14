@@ -14,9 +14,9 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 export interface AddOrEditPetDialogData {
   pet: Pet;
   isNewPet: boolean;
-  lastPetId: number;
-  lastCategoryId: number;
-  lastTagId: number;
+  firstAvailablePetId: number;
+  firstAvailableCategoryId: number;
+  availableTagIds: number[];
 }
 
 @Component({
@@ -35,7 +35,7 @@ export class AddEditPetDialogComponent implements OnInit, OnDestroy {
               private readonly snackBar: MatSnackBar) {
   }
 
-
+  urlPattern = /^(https?|ftp)?(:\/\/)?[^\s/$.?#].[^\s]*$/;
   statuses = Object.values(PetStatus);
   submitAttempt = false;
   dialogTitle = this.data.isNewPet ? 'Add new pet' : `Edit pet - ${this.data.pet.name}`;
@@ -52,8 +52,13 @@ export class AddEditPetDialogComponent implements OnInit, OnDestroy {
       id: [null, Validators.required],
       name: ['', Validators.minLength(1)],
     }),
-    photoUrls: new FormArray([]),
-    tags: new FormArray([]),
+    photoUrls: new FormArray([new FormControl(null, [Validators.pattern(this.urlPattern)])]),
+    tags: new FormArray([
+      this.formBuilder.group({
+        id: [null, Validators.required],
+        name: ['', Validators.minLength(1)],
+      })
+    ]),
     status: [PetStatus.Available, Validators.required],
   });
 
@@ -90,7 +95,7 @@ export class AddEditPetDialogComponent implements OnInit, OnDestroy {
     const value = (event.value || '').trim();
 
     if (value) {
-      this.tagsArray.push(new FormControl({id: this.data.lastTagId + 10, name: value}));
+      this.tagsArray.push(new FormControl({id: this.data.availableTagIds[this.tagsArray.length], name: value}));
     }
 
     event.chipInput.clear();
@@ -120,12 +125,14 @@ export class AddEditPetDialogComponent implements OnInit, OnDestroy {
     this.submitAttempt = true;
     this.store$.dispatch(PetsActions.clearAddedAndDeleted());
     if (this.data.isNewPet) {
-      this.petForm.patchValue({...this.petForm.value, id: this.data.lastPetId + 10});
+      this.petForm.patchValue({...this.petForm.value, id: this.data.firstAvailablePetId});
     }
     if (this.petForm.invalid) {
       return;
     } else {
-      this.store$.dispatch(this.data.isNewPet ? PetsActions.addPet({pet: this.petForm.value}) : PetsActions.editPet({pet: this.petForm.value}));
+      this.store$.dispatch(this.data.isNewPet
+        ? PetsActions.addPet({pet: this.petForm.value})
+        : PetsActions.editPet({pet: this.petForm.value}));
       this.petSaved$.pipe(delay(500)).subscribe((data) => {
         if (data) {
           this.dialogRef.close(this.petForm.value);
@@ -136,17 +143,17 @@ export class AddEditPetDialogComponent implements OnInit, OnDestroy {
 
   private initForm(): void {
     this.petForm = this.formBuilder.group({
-      id: [this.data.lastPetId + 10, Validators.required],
+      id: [this.data.firstAvailablePetId, Validators.required],
       name: ['', [Validators.required, Validators.minLength(1)]],
       category: this.formBuilder.group({
-        id: [this.data.lastCategoryId + 10, Validators.required],
+        id: [this.data.firstAvailableCategoryId, Validators.required],
         name: ['', Validators.minLength(1)],
       }),
       photoUrls: new FormArray([]),
       tags: new FormArray([]),
       status: [PetStatus.Available, Validators.required],
     });
-    this.petForm.get('photoUrls')?.addValidators(Validators.pattern(/^(https?|ftp)?(:\/\/)?[^\s/$.?#].[^\s]*$/));
+    this.petForm.get('photourls')?.setValidators([Validators.pattern(this.urlPattern)]);
   }
 
   private convertPetToFormData(pet: Pet): void {
@@ -154,13 +161,24 @@ export class AddEditPetDialogComponent implements OnInit, OnDestroy {
       id: [pet.id, Validators.required],
       name: [pet.name || null, [Validators.required, Validators.minLength(1)]],
       category: this.formBuilder.group({
-        id: [pet.category?.id ?? this.data.lastCategoryId + 10, Validators.required],
+        id: [pet.category?.id ?? this.data.firstAvailableCategoryId, Validators.required],
         name: [pet.category?.name ?? '', Validators.minLength(1)],
       }),
-      photoUrls: this.data.pet.photoUrls ? new FormArray(this.data.pet.photoUrls.map(url => new FormControl(url))) : new FormArray([]),
-      tags: this.data.pet.tags ? new FormArray(this.data.pet.tags.map(tag => new FormControl(tag))) : new FormArray([]),
+      photoUrls: this.data.pet.photoUrls
+        ? new FormArray(this.data.pet.photoUrls.map(url => new FormControl(url, Validators.pattern(this.urlPattern))))
+        : new FormArray([new FormControl('', Validators.pattern(this.urlPattern))]),
+      tags: this.data.pet.tags
+        ? new FormArray(this.data.pet.tags.map(tag => this.formBuilder.group({
+          id: [tag.id, Validators.required],
+          name: [tag.name, Validators.minLength(1)],
+        })
+      ))
+        : new FormArray([this.formBuilder.group({
+          id: [this.data.availableTagIds[0], Validators.required],
+          name: ['', Validators.minLength(1)],
+        })
+      ]),
       status: [pet.status ?? PetStatus.Available, Validators.required],
     });
-    this.petForm.get('photoUrls')?.addValidators(Validators.pattern(/^(https?|ftp)?(:\/\/)?[^\s/$.?#].[^\s]*$/));
   }
 }

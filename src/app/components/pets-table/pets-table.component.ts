@@ -35,9 +35,9 @@ export class PetsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     'actions'
   ];
   pets: Pet[] = [];
-  lastPetId = 0;
-  lastCategoryId = 0;
-  lastTagId = 0;
+  firstAvailablePetId = 1;
+  firstAvailableCategoryId = 1;
+  availableTagIds: number[] = [];
   petsDataSource = new MatTableDataSource<Pet>([]);
 
   filteredPets$: Observable<Pet[]> = this.store$.select('pets', 'filteredPets').pipe(takeUntil(this.unsubscribe$));
@@ -46,9 +46,9 @@ export class PetsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   wasPetDeleted$: Observable<number | null> = this.store$.select('pets', 'petDeleted').pipe(takeUntil(this.unsubscribe$));
   wasPetAdded$: Observable<Pet | null> = this.store$.select('pets', 'petAdded').pipe(takeUntil(this.unsubscribe$));
   petError$: Observable<HttpErrorResponse | null> = this.store$.select('pets', 'petRequestError').pipe(takeUntil(this.unsubscribe$));
-  lastPetId$ = this.store$.select('pets', 'lastPetId').pipe(takeUntil(this.unsubscribe$));
-  lastCategoryId$ = this.store$.select('pets', 'lastCategoryId').pipe(takeUntil(this.unsubscribe$));
-  lastTagId$ = this.store$.select('pets', 'lastTagId').pipe(takeUntil(this.unsubscribe$));
+  firstAvailablePetId$ = this.store$.select('pets', 'firstAvailablePetId').pipe(takeUntil(this.unsubscribe$));
+  firstAvailableCategoryId$ = this.store$.select('pets', 'firstAvailableCategoryId').pipe(takeUntil(this.unsubscribe$));
+  availableTagIds$ = this.store$.select('pets', 'availableTagIds').pipe(takeUntil(this.unsubscribe$));
 
   constructor(private readonly store$: Store<State>,
               private readonly dialog: MatDialog,
@@ -60,9 +60,9 @@ export class PetsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       this.pets = data;
       this.petsDataSource.data = data;
     });
-    this.lastPetId$.subscribe(data => this.lastPetId = data ?? 0);
-    this.lastCategoryId$.subscribe(data => this.lastCategoryId = data ?? 0);
-    this.lastTagId$.subscribe(data => this.lastTagId = data ?? 0);
+    this.firstAvailablePetId$.subscribe(data => this.firstAvailablePetId = data ?? 1);
+    this.firstAvailableCategoryId$.subscribe(data => this.firstAvailableCategoryId = data ?? 1);
+    this.availableTagIds$.subscribe(data => this.availableTagIds = data ?? [1]);
     this.wasPetDeleted$.subscribe((data: number | null) => {
       if (data) {
         const pet = getPetById(data);
@@ -105,9 +105,9 @@ export class PetsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       data: {
         pet: pet,
         isNewPet: false,
-        lastPetId: this.lastPetId,
-        lastCategoryId: this.lastCategoryId,
-        lastTagId: this.lastTagId
+        firstAvailablePetId: this.firstAvailablePetId,
+        firstAvailableCategoryId: this.firstAvailableCategoryId,
+        availableTagIds: this.availableTagIds
       },
       width: '600px'
     }).afterClosed().subscribe((data: Pet) => {

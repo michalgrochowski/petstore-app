@@ -15,7 +15,7 @@ export class ApiClientService implements ApiClient {
   }
 
   addPet(pet: Pet): Observable<Pet> {
-    return this.httpClient.post<Pet>(this.apiUrl, JSON.stringify(pet));
+    return this.httpClient.post<Pet>(this.apiUrl, pet);
   }
 
   deletePet(petId: number): Observable<{ code: number, type: string, message: string }> {

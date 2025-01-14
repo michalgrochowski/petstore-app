@@ -25,7 +25,7 @@ import {MatInput, MatInputModule} from "@angular/material/input";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatButton, MatFabButton, MatIconButton} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
-import { NavbarComponent } from './components/navbar/navbar/navbar.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 import {MatToolbar} from "@angular/material/toolbar";
 import { PetDetailsDialogComponent } from './dialogs/pet-details-dialog/pet-details-dialog.component';
 import {ConfirmationDialogComponent} from "./dialogs/confirmation-dialog/confirmation-dialog.component";

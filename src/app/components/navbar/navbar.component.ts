@@ -1,10 +1,10 @@
 import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Store} from "@ngrx/store";
-import {State} from "../../../reducers";
+import {State} from "../../reducers";
 import {MatDialog} from "@angular/material/dialog";
-import {AddEditPetDialogComponent} from "../../../dialogs/add-edit-pet-dialog/add-edit-pet-dialog.component";
-import {PetsActions} from "../../../features/pets/pets.actions";
-import {PetStatus} from "../../../enums/pet-status";
+import {AddEditPetDialogComponent} from "../../dialogs/add-edit-pet-dialog/add-edit-pet-dialog.component";
+import {PetsActions} from "../../features/pets/pets.actions";
+import {PetStatus} from "../../enums/pet-status";
 import {Subject, takeUntil} from "rxjs";
 import {MatSlideToggleChange} from "@angular/material/slide-toggle";
 import {DOCUMENT} from "@angular/common";
@@ -28,18 +28,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
   searchValue = '';
   currentTheme = 'dark';
   statuses = Object.values(PetStatus);
-  lastPetId = 0;
-  lastCategoryId = 0;
-  lastTagId = 0;
+  firstAvailablePetId = 1;
+  firstAvailableCategoryId = 1;
+  availableTagIds: number[] = [];
 
-  lastPetId$ = this.store$.select('pets', 'lastPetId').pipe(takeUntil(this.unsubscribe$));
-  lastCategoryId$ = this.store$.select('pets', 'lastCategoryId').pipe(takeUntil(this.unsubscribe$));
-  lastTagId$ = this.store$.select('pets', 'lastTagId').pipe(takeUntil(this.unsubscribe$));
+  firstAvailablePetId$ = this.store$.select('pets', 'firstAvailablePetId').pipe(takeUntil(this.unsubscribe$));
+  firstAvailableCategoryId$ = this.store$.select('pets', 'firstAvailableCategoryId').pipe(takeUntil(this.unsubscribe$));
+  availableTagIds$ = this.store$.select('pets', 'availableTagIds').pipe(takeUntil(this.unsubscribe$));
 
   ngOnInit(): void {
-    this.lastPetId$.subscribe(data => this.lastPetId = data ?? 0);
-    this.lastCategoryId$.subscribe(data => this.lastCategoryId = data ?? 0);
-    this.lastTagId$.subscribe(data => this.lastTagId = data ?? 0);
+    this.firstAvailablePetId$.subscribe(data => this.firstAvailablePetId = data ?? 1);
+    this.firstAvailableCategoryId$.subscribe(data => this.firstAvailableCategoryId = data ?? 1);
+    this.availableTagIds$.subscribe(data => this.availableTagIds = data ?? [1]);
   }
 
   ngOnDestroy(): void {
@@ -51,9 +51,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
       data: {
         pet: null,
         isNewPet: true,
-        lastPetId: this.lastPetId,
-        lastCategoryId: this.lastCategoryId,
-        lastTagId: this.lastTagId
+        firstAvailablePetId: this.firstAvailablePetId,
+        firstAvailableCategoryId: this.firstAvailableCategoryId,
+        availableTagIds: this.availableTagIds
       },
       width: '600px'
     });

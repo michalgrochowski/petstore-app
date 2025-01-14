@@ -80,4 +80,11 @@ export class PetsEffects {
         return of(PetsActions.setFilterResults({searchResults: filteredPets}))
       })
     ));
+
+  calculateAvailableIds$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PetsActions.petsLoaded, PetsActions.petAdded, PetsActions.petDeleted, PetsActions.petEdited, PetsActions.petLoaded),
+      switchMap(() => of(PetsActions.calculateAvailableIds()))
+    ),
+  )
 }

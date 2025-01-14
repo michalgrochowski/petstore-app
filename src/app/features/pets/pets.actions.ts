@@ -23,6 +23,7 @@ export const PetsActions = createActionGroup({
     'Pet Failed to Load': props<{readonly error: HttpErrorResponse}>(),
     'Filter Pets': props<{readonly searchValue: string}>(),
     'Set Filter Results': props<{readonly searchResults: Pet[]}>(),
+    'Calculate Available ids': emptyProps(),
     'Clear Added and Deleted': emptyProps(),
   }
 });

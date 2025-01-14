@@ -2,11 +2,11 @@ import { createReducer, on } from '@ngrx/store';
 import { PetsActions } from './pets.actions';
 import {Pet} from "../../models/pet";
 import {createEntityAdapter, EntityAdapter, EntityState} from "@ngrx/entity";
-import {flattenArray} from "../../helpers/flatten-array";
-import {PetTag} from "../../models/pet-tag";
-import {PetCategory} from "../../models/pet-category";
 import * as _ from 'lodash';
 import {HttpErrorResponse} from "@angular/common/http";
+import {findFirstAvailableId} from "../../helpers/find-first-available-id";
+import {flatten} from "lodash";
+import {findMissingNumbers} from "../../helpers/find-missing-ids";
 
 export const petsFeatureKey = 'pets';
 
@@ -23,9 +23,9 @@ export interface State {
   petDeleted: number | null;
   petAdded: Pet | null;
   petRequestError: HttpErrorResponse | null;
-  lastPetId: number | null;
-  lastCategoryId: number | null;
-  lastTagId: number | null;
+  firstAvailablePetId: number;
+  firstAvailableCategoryId: number;
+  availableTagIds: number[]
 }
 
 export const adapter: EntityAdapter<Pet> = createEntityAdapter<Pet>({
@@ -45,9 +45,9 @@ export const initialState: State = {
   petDeleted: null,
   petAdded: null,
   petRequestError: null,
-  lastPetId: null,
-  lastCategoryId: null,
-  lastTagId: null,
+  firstAvailablePetId: 1,
+  firstAvailableCategoryId: 1,
+  availableTagIds: []
 };
 
 export const reducer = createReducer(
@@ -64,10 +64,21 @@ export const reducer = createReducer(
       ...state,
       pets: adapter.setAll(action.pets, initialState.pets),
       loadingPets: false,
-      petsLoaded: true,
-      lastPetId: _.cloneDeep(action.pets).sort((a: Pet, b: Pet) => b.id > a.id ? 1 : -1)[0]?.id,
-      lastCategoryId: _.cloneDeep(action.pets).map((pet: Pet) => pet.category).sort((a: PetCategory, b: PetCategory) => b.id > a.id ? 1 : -1)[0]?.id,
-      lastTagId: flattenArray(_.cloneDeep(action.pets).map((pet: Pet) => pet.tags)).sort((a: PetTag, b: PetTag) => b.id > a.id ? 1 : -1)[0]?.id,
+      petsLoaded: true
+    };
+  }),
+  on(PetsActions.calculateAvailableIds, (state) => {
+    return {
+      ...state,
+      firstAvailablePetId: findFirstAvailableId(_.cloneDeep(selectAll(state.pets))
+        .map(pet => pet.id)
+        .filter(num => num > 0)),
+      firstAvailableCategoryId: findFirstAvailableId(_.cloneDeep(selectAll(state.pets))
+        .map(pet => pet.category ? pet.category.id : null)
+        .filter(num => num && num > 0).filter(num => num !== null)),
+      availableTagIds: findMissingNumbers(flatten(_.cloneDeep(selectAll(state.pets))
+        .map(pet => pet.tags ? pet.tags.map(tag => tag.id).filter(num => num > 0 && num < 1000) : []))
+        .filter(num => num !== null))
     };
   }),
   on(PetsActions.petsFailedToLoad, (state, action) => {
