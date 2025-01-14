@@ -19,14 +19,25 @@
   margin-left: 1rem;
 }
 
-.navbar__status-select-container {
-  margin-left: auto;
+.navbar__status-select-container, .navbar__search-container {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.navbar__status-select {
+.navbar__search-container {
+  margin: 0 2rem 0 auto;
+  position: relative;
+}
+
+.navbar__search-container-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 5px;
+}
+
+.navbar__status-select, .navbar__search {
   display: flex;
   justify-content: center;
   width: 10rem;
@@ -34,6 +45,17 @@
   height: 1.6rem;
   padding: 0.5rem 1rem;
   border-radius: 20px;
+}
+
+.navbar__search {
+  border: none;
+  color: var(--mat-sys-on-surface);
+  opacity: 0.8;
+  transition: 0.3s all;
+  &:focus {
+    opacity: 1;
+    outline: none;
+  }
 }
 
 .navbar__status-select-label {

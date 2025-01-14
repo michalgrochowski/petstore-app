@@ -43,7 +43,7 @@ export class AddEditPetDialogComponent implements OnInit, OnDestroy {
   petSaved$ = this.store$.select('pets', 'petUpdated').pipe(takeUntil(this.unsubscribe$));
   savingPetFailed$ = this.store$.select('pets', 'petFailedToUpdate').pipe(takeUntil(this.unsubscribe$));
 
-  petError$: Observable<any> = this.store$.select('pets', 'petRequestError');
+  petError$: Observable<HttpErrorResponse | null> = this.store$.select('pets', 'petRequestError');
 
   petForm: FormGroup = this.formBuilder.group({
     id: [null, Validators.required],
@@ -149,7 +149,7 @@ export class AddEditPetDialogComponent implements OnInit, OnDestroy {
     this.petForm.get('photoUrls')?.addValidators(Validators.pattern(/^(https?|ftp)?(:\/\/)?[^\s/$.?#].[^\s]*$/));
   }
 
-  private convertPetToFormData(pet: Pet): any {
+  private convertPetToFormData(pet: Pet): void {
     this.petForm = this.formBuilder.group({
       id: [pet.id, Validators.required],
       name: [pet.name || null, [Validators.required, Validators.minLength(1)]],

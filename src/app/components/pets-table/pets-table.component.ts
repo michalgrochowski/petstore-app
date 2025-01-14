@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {select, Store} from "@ngrx/store";
+import {Store} from "@ngrx/store";
 import {State} from "../../reducers";
-import {getAllPets, getPetById} from "../../features/pets/pets.selectors";
+import {getPetById} from "../../features/pets/pets.selectors";
 import {Pet} from "../../models/pet";
 import {Observable, Subject, takeUntil} from "rxjs";
 import {MatTableDataSource} from "@angular/material/table";
@@ -40,12 +40,12 @@ export class PetsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   lastTagId = 0;
   petsDataSource = new MatTableDataSource<Pet>([]);
 
-  pets$: Observable<Pet[]> = this.store$.pipe(select(getAllPets), takeUntil(this.unsubscribe$));
+  filteredPets$: Observable<Pet[]> = this.store$.select('pets', 'filteredPets').pipe(takeUntil(this.unsubscribe$));
   isLoadingPets$: Observable<boolean> = this.store$.select('pets', 'loadingPets').pipe(takeUntil(this.unsubscribe$));
   petsFailedToLoad$: Observable<boolean> = this.store$.select('pets', 'petsFailedToLoad').pipe(takeUntil(this.unsubscribe$));
   wasPetDeleted$: Observable<number | null> = this.store$.select('pets', 'petDeleted').pipe(takeUntil(this.unsubscribe$));
   wasPetAdded$: Observable<Pet | null> = this.store$.select('pets', 'petAdded').pipe(takeUntil(this.unsubscribe$));
-  petError$: Observable<any> = this.store$.select('pets', 'petRequestError').pipe(takeUntil(this.unsubscribe$));
+  petError$: Observable<HttpErrorResponse | null> = this.store$.select('pets', 'petRequestError').pipe(takeUntil(this.unsubscribe$));
   lastPetId$ = this.store$.select('pets', 'lastPetId').pipe(takeUntil(this.unsubscribe$));
   lastCategoryId$ = this.store$.select('pets', 'lastCategoryId').pipe(takeUntil(this.unsubscribe$));
   lastTagId$ = this.store$.select('pets', 'lastTagId').pipe(takeUntil(this.unsubscribe$));
@@ -56,7 +56,7 @@ export class PetsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.pets$.subscribe(data => {
+    this.filteredPets$.subscribe(data => {
       this.pets = data;
       this.petsDataSource.data = data;
     });

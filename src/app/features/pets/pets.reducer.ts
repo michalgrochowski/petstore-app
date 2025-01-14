@@ -12,6 +12,8 @@ export const petsFeatureKey = 'pets';
 
 export interface State {
   pets: EntityState<Pet>,
+  filteredPets: Pet[];
+  searchValue: string;
   loadingPets: boolean,
   petsLoaded: boolean,
   petsFailedToLoad: boolean,
@@ -32,6 +34,8 @@ export const adapter: EntityAdapter<Pet> = createEntityAdapter<Pet>({
 
 export const initialState: State = {
   pets: adapter.getInitialState(),
+  filteredPets: [],
+  searchValue: '',
   loadingPets: false,
   petsLoaded: false,
   petsFailedToLoad: false,
@@ -167,13 +171,24 @@ export const reducer = createReducer(
     }
   }),
   on(PetsActions.petFailedToDelete, (state, action) => {
-    console.log(action.error)
     return {
       ...state,
       petUpdating: false,
       petFailedToUpdate: true,
       petRequestError: action.error
     };
+  }),
+  on(PetsActions.filterPets, (state, action) => {
+    return {
+      ...state,
+      searchValue: action.searchValue
+    }
+  }),
+  on(PetsActions.setFilterResults, (state, action) => {
+    return {
+      ...state,
+      filteredPets: action.searchResults
+    }
   }),
   on(PetsActions.clearAddedAndDeleted, (state) =>
     ({...state, petAdded: null, petDeleted: null}))

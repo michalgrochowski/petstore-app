@@ -12,6 +12,7 @@ module.exports = tseslint.config(
       ...tseslint.configs.stylistic,
       ...angular.configs.tsRecommended,
     ],
+    ignores: ['src/app/helpers/*'],
     processor: angular.processInlineTemplates,
     rules: {
       "@angular-eslint/directive-selector": [
@@ -31,6 +32,12 @@ module.exports = tseslint.config(
         },
       ],
       "@angular-eslint/prefer-standalone": [
+        "off"
+      ],
+      // '@typescript-eslint/no-explicit-any': [
+      //   "off"
+      // ],
+      '@typescript-eslint/ban-ts-comment': [
         "off"
       ]
     },

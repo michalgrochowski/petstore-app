@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Store} from "@ngrx/store";
 import {State} from "../../../reducers";
 import {MatDialog} from "@angular/material/dialog";
@@ -23,6 +23,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
               @Inject(DOCUMENT) private document: Document) {
   }
 
+  @ViewChild('searchInput') searchInput: ElementRef | undefined;
+
+  searchValue = '';
   currentTheme = 'dark';
   statuses = Object.values(PetStatus);
   lastPetId = 0;
@@ -58,6 +61,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   filterByStatus(status: PetStatus): void {
     this.store$.dispatch(PetsActions.loadPets({status}))
+  }
+
+  filterPets($event: Event): void {
+    this.searchValue = ($event.target as HTMLInputElement)?.value
+    this.store$.dispatch(PetsActions.filterPets({searchValue: this.searchValue}));
+  }
+
+  clearSearchValue(): void {
+    this.searchValue = '';
+    (this.searchInput?.nativeElement as HTMLInputElement).value = '';
+    this.store$.dispatch(PetsActions.filterPets({searchValue: this.searchValue}));
   }
 
   switchTheme($event: MatSlideToggleChange): void {

@@ -5,6 +5,12 @@
     <mat-slide-toggle [checked]="false" (change)="switchTheme($event)"></mat-slide-toggle>
     <mat-icon class="navbar__theme-switcher-icon">light_mode</mat-icon>
   </div>
+  <div class="navbar__search-container">
+    <p class="navbar__status-select-label">Search pets by name:</p>
+    <input matInput class="navbar__search" type="text" placeholder="'Search..." (input)="filterPets($event)" #searchInput>
+    <button class="navbar__search-container-button" matSuffix mat-icon-button *ngIf="searchValue.length === 0"><mat-icon>search</mat-icon></button>
+    <button class="navbar__search-container-button" matSuffix mat-icon-button *ngIf="searchValue.length > 0" (click)="clearSearchValue()"><mat-icon>cancel</mat-icon></button>
+  </div>
   <div class="navbar__status-select-container">
     <p class="navbar__status-select-label">Filter pets by status:</p>
     <mat-select class="navbar__status-select" [value]="'available'" (selectionChange)="filterByStatus($event.value)">

@@ -1,22 +1,30 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import {catchError, switchMap} from 'rxjs/operators';
+import {catchError, switchMap, withLatestFrom} from 'rxjs/operators';
 import { of } from 'rxjs';
 import { PetsActions } from './pets.actions';
 import {ApiClientService} from "../../services/api-client.service";
 import {Pet} from "../../models/pet";
 import {HttpErrorResponse} from "@angular/common/http";
+import {getAllPets} from "./pets.selectors";
+import {Store} from "@ngrx/store";
+import {State} from "../../reducers";
 
 @Injectable()
 export class PetsEffects {
-  constructor(private actions$: Actions, private readonly httpClient: ApiClientService) {
+  constructor(private actions$: Actions,
+              private readonly httpClient: ApiClientService,
+              private readonly store$: Store<State>) {
   }
 
   loadPets$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PetsActions.loadPets),
       switchMap(action => this.httpClient.getPetsByStatus(action.status)),
-      switchMap((pets: Pet[]) => of(PetsActions.petsLoaded({pets}))),
+      withLatestFrom(this.store$.select('pets', 'searchValue')),
+      switchMap(([pets, searchValue]) => {
+        return [PetsActions.petsLoaded({pets}), PetsActions.filterPets({searchValue: searchValue})]
+      }),
       catchError((error: HttpErrorResponse) => of(PetsActions.petsFailedToLoad({error})))
     ));
 
@@ -24,7 +32,9 @@ export class PetsEffects {
     this.actions$.pipe(
       ofType(PetsActions.loadPet),
       switchMap(action => this.httpClient.getPet(action.id)),
-      switchMap((pet: Pet) => of(PetsActions.petLoaded({pet}))),
+      withLatestFrom(this.store$.select('pets', 'searchValue')),
+      switchMap(([pet, searchValue]) =>
+        [PetsActions.petLoaded({pet}), PetsActions.filterPets({searchValue: searchValue})]),
       catchError((error: HttpErrorResponse) => of(PetsActions.petFailedToLoad({error})))
     ));
 
@@ -32,7 +42,9 @@ export class PetsEffects {
     this.actions$.pipe(
       ofType(PetsActions.addPet),
       switchMap(action => this.httpClient.addPet(action.pet)),
-      switchMap((pet: Pet) => of(PetsActions.petAdded({pet}))),
+      withLatestFrom(this.store$.select('pets', 'searchValue')),
+      switchMap(([pet, searchValue]) =>
+        [PetsActions.petAdded({pet}), PetsActions.filterPets({searchValue: searchValue})]),
       catchError((error: HttpErrorResponse) => of(PetsActions.petFailedToAdd({error})))
   ));
 
@@ -40,8 +52,9 @@ export class PetsEffects {
     this.actions$.pipe(
       ofType(PetsActions.deletePet),
       switchMap(action => this.httpClient.deletePet(action.pet.id)),
-      switchMap((deleteResponse: { code: number, type: string, message: string }) =>
-        of(PetsActions.petDeleted({petId: Number(deleteResponse.message)}))),
+      withLatestFrom(this.store$.select('pets', 'searchValue')),
+      switchMap(([deleteResponse, searchValue]) =>
+        [PetsActions.petDeleted({petId: Number(deleteResponse.message)}), PetsActions.filterPets({searchValue: searchValue})]),
       catchError((error: HttpErrorResponse) => of(PetsActions.petFailedToDelete({error})))
     ));
 
@@ -49,7 +62,22 @@ export class PetsEffects {
     this.actions$.pipe(
       ofType(PetsActions.editPet),
       switchMap(action => this.httpClient.editPet(action.pet)),
-      switchMap((pet: Pet) => of(PetsActions.petEdited({pet}))),
+      withLatestFrom(this.store$.select('pets', 'searchValue')),
+      switchMap(([pet, searchValue]) =>
+        [PetsActions.petEdited({pet}), PetsActions.filterPets({searchValue: searchValue})]),
       catchError((error: HttpErrorResponse) => of(PetsActions.petFailedToEdit({error})))
+    ));
+
+  filterPets$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PetsActions.filterPets),
+      withLatestFrom(this.store$.select(getAllPets)),
+      switchMap(([action, pets]) => {
+        const cleanSearchValue = action.searchValue
+          .trim()
+          .toLowerCase();
+        const filteredPets = pets.filter((pet: Pet) => pet.name ? pet.name.toLowerCase().includes(cleanSearchValue) : false);
+        return of(PetsActions.setFilterResults({searchResults: filteredPets}))
+      })
     ));
 }
