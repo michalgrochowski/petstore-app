@@ -141,7 +141,7 @@ export class AddEditPetDialogComponent implements OnInit, OnDestroy {
     }
   }
 
-  private initForm(): void {
+  initForm(): void {
     this.petForm = this.formBuilder.group({
       id: [this.data.firstAvailablePetId, Validators.required],
       name: ['', [Validators.required, Validators.minLength(1)]],
@@ -156,7 +156,7 @@ export class AddEditPetDialogComponent implements OnInit, OnDestroy {
     this.petForm.get('photourls')?.setValidators([Validators.pattern(this.urlPattern)]);
   }
 
-  private convertPetToFormData(pet: Pet): void {
+  convertPetToFormData(pet: Pet): void {
     this.petForm = this.formBuilder.group({
       id: [pet.id, Validators.required],
       name: [pet.name || null, [Validators.required, Validators.minLength(1)]],
