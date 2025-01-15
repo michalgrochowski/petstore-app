@@ -5,12 +5,15 @@ import {MockStore, provideMockStore} from "@ngrx/store/testing";
 import {initialState} from "../../../test/test-store";
 import {createPet} from "../../../test/factories/pet-factory";
 import {MatIconModule} from "@angular/material/icon";
-import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatFormFieldModule, MatLabel} from "@angular/material/form-field";
 import {FormBuilder, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from "@angular/forms";
-import {MatChipGrid, MatChipInput, MatChipRow} from "@angular/material/chips";
+import {MatChipGrid, MatChipInput, MatChipRow, MatChipsModule} from "@angular/material/chips";
 import {MatInputModule} from "@angular/material/input";
 import {forwardRef} from "@angular/core";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatSelectModule} from "@angular/material/select";
+import {provideAnimationsAsync} from "@angular/platform-browser/animations/async";
+import {provideAnimations} from "@angular/platform-browser/animations";
 
 describe('AddEditPetComponent', () => {
   let component: AddEditPetDialogComponent;
@@ -20,7 +23,11 @@ describe('AddEditPetComponent', () => {
   let snackbar: MatSnackBar;
 
   const dialogData = {
-    pet: createPet({id: 1, name: 'Pet1'})
+    pet: createPet({id: 1, name: 'Pet1'}),
+    isNewPet: false,
+    firstAvailablePetId: 1,
+    firstAvailableCategoryId: 1,
+    availableTagIds: [1]
   };
 
   beforeEach(async () => {
@@ -37,7 +44,10 @@ describe('AddEditPetComponent', () => {
         MatChipRow,
         MatChipGrid,
         MatChipInput,
-        MatInputModule
+        MatInputModule,
+        MatLabel,
+        MatChipsModule,
+        MatSelectModule
       ],
       providers: [
         { provide: MatDialog },
@@ -46,11 +56,8 @@ describe('AddEditPetComponent', () => {
         FormBuilder,
         MatSnackBar,
         provideMockStore({initialState}),
-        {
-          provide: NG_VALUE_ACCESSOR,
-          useExisting: forwardRef(() => AddEditPetDialogComponent),
-          multi: true,
-        }
+        provideAnimationsAsync(),
+        provideAnimations()
       ],
     })
     .compileComponents();
@@ -58,7 +65,6 @@ describe('AddEditPetComponent', () => {
     fixture = TestBed.createComponent(AddEditPetDialogComponent);
     component = fixture.componentInstance;
     component.convertPetToFormData(dialogData.pet);
-    console.log(component.petForm.value)
     store = TestBed.inject(MockStore);
     formBuilder = TestBed.inject((FormBuilder));
     snackbar = TestBed.inject((MatSnackBar));
