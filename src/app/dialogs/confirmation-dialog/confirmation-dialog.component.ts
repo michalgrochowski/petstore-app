@@ -15,7 +15,7 @@ export interface ConfirmDialogData {
 })
 export class ConfirmationDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData,
-              private readonly dialogRef: MatDialogRef<ConfirmationDialogComponent>) {
+              readonly dialogRef: MatDialogRef<ConfirmationDialogComponent>) {
   }
 
   cancel(): void {

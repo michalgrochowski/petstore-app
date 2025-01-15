@@ -8,9 +8,8 @@ import {MatIcon} from "@angular/material/icon";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatChip, MatChipGrid, MatChipInput, MatChipRow, MatChipSet} from "@angular/material/chips";
 import {initialState} from "../../../test/test-store";
-import {HarnessLoader} from "@angular/cdk/testing";
-import {TestbedHarnessEnvironment} from "@angular/cdk/testing/testbed";
 import {MatTooltip} from "@angular/material/tooltip";
+import {TitleCasePipe} from "@angular/common";
 
 describe('PetDetailsDialogComponent', () => {
   let component: PetDetailsDialogComponent;
@@ -21,10 +20,7 @@ describe('PetDetailsDialogComponent', () => {
     pet: createPet({id: 1, name: 'Pet1'})
   };
 
-  let loader: HarnessLoader;
-
   beforeEach(async () => {
-    const closeSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
 
     await TestBed.configureTestingModule({
       declarations: [PetDetailsDialogComponent],
@@ -38,11 +34,17 @@ describe('PetDetailsDialogComponent', () => {
         MatChipGrid,
         MatChipInput,
         MatChipSet,
-        MatTooltip
+        MatTooltip,
+        TitleCasePipe
       ],
       providers: [
         { provide: MatDialog },
-        { provide: MatDialogRef, useValue: closeSpy },
+        {provide: MatDialogRef,
+          useValue: {
+            close: () => {},
+            componentInstance: () => {}
+          }
+        },
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
         provideMockStore({initialState}),
       ]
@@ -52,12 +54,21 @@ describe('PetDetailsDialogComponent', () => {
     fixture = TestBed.createComponent(PetDetailsDialogComponent);
     component = fixture.componentInstance;
     store = TestBed.inject(MockStore);
-    loader = TestbedHarnessEnvironment.loader(fixture);
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('WHEN close method is used THEN it should close the dialog', async () => {
+    spyOn(component.dialogRef, 'close');
+    component.close();
+    fixture.detectChanges();
+
+    await fixture.whenStable().then(() => {
+      expect(component.dialogRef.close).toHaveBeenCalled();
+    });
   });
 
   afterAll(() => {

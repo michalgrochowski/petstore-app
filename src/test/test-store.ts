@@ -1,5 +1,6 @@
 import {State} from "../app/reducers";
 import {createPet} from "./factories/pet-factory";
+import {PetStatus} from "../app/enums/pet-status";
 
 export const initialState = (): State => {
   return {
@@ -7,6 +8,7 @@ export const initialState = (): State => {
       pets: {ids: [1, 2], entities: {1: createPet({id: 1, name: 'Pet1'}), 2: createPet({id: 2, name: 'Pet2'})}},
       filteredPets: [],
       searchValue: '',
+      selectedStatus: PetStatus.Available,
       loadingPets: false,
       petsLoaded: false,
       petsFailedToLoad: false,

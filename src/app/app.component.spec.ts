@@ -21,6 +21,7 @@ import {
 import {provideAnimationsAsync} from "@angular/platform-browser/animations/async";
 import {provideAnimations} from "@angular/platform-browser/animations";
 import {MatOptionModule} from "@angular/material/core";
+import {CommonModule} from "@angular/common";
 
 describe('AppComponent', () => {
   let store: MockStore;
@@ -50,7 +51,8 @@ describe('AppComponent', () => {
         MatHeaderRowDef,
         MatCellDef,
         MatRowDef,
-        MatHeaderRow
+        MatHeaderRow,
+        CommonModule,
       ]
     }).compileComponents();
   });

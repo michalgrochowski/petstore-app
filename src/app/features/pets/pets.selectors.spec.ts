@@ -2,42 +2,46 @@ import {getAllPets, getPetById} from './pets.selectors';
 import {createPet} from "../../../test/factories/pet-factory";
 import {initialState} from "../../../test/test-store";
 import {Pet} from "../../models/pet";
+import {State} from "../../reducers";
 
 describe('Pets selectors', () => {
   describe('getAllPets', () => {
     it('should get all pets', () => {
-      const pets = [
+      const petEntities = [
         createPet({id: 1, name: 'Pet1'}),
         createPet({id: 2, name: 'Pet2'}),
       ];
 
-      const ids = pets.map(item => item.id);
+      const ids = petEntities.map(item => item.id);
       const entities = {};
       // @ts-ignore
-      pets.forEach((item: Pet) => entities[item.id] = item);
+      petEntities.forEach((item: Pet) => entities[item.id] = item);
 
-      const characters = {ids, entities};
-      const state = {...initialState(), characters};
+      const pets = {ids, entities};
+      const state: State = {...initialState(), pets: {...initialState().pets, pets: pets}};
       const select = getAllPets(state);
 
-      expect(select).toEqual(pets);
+      expect(select).toEqual(petEntities);
     });
   });
 
-  xdescribe('getPetById', () => {
+  describe('getPetById', () => {
     it('should get pet by id', () => {
-      const charactersEntities = [
+      const petEntities = [
         createPet({id: 1, name: 'Pet1'}),
         createPet({id: 2, name: 'Pet2'}),
       ];
 
+      const ids = petEntities.map(item => item.id);
       const entities = {};
       // @ts-ignore
-      charactersEntities.forEach(item => entities[item.id] = item);
+      petEntities.forEach((item: Pet) => entities[item.id] = item);
 
-      const select = getPetById(1);
+      const pets = {ids, entities};
+      const state: State = {...initialState(), pets: {...initialState().pets, pets: pets}};
+      const select: Pet | undefined = getPetById(1).projector(state.pets);
 
-      expect(select).toEqual(charactersEntities[0]);
+      expect(select).toEqual(petEntities[0]);
     });
   });
 });

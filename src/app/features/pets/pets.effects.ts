@@ -71,12 +71,12 @@ export class PetsEffects {
   filterPets$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PetsActions.filterPets),
-      withLatestFrom(this.store$.select(getAllPets)),
-      switchMap(([action, pets]) => {
+      withLatestFrom(this.store$.select(getAllPets), this.store$.select('pets', 'selectedStatus')),
+      switchMap(([action, pets, selectedStatus]) => {
         const cleanSearchValue = action.searchValue
           .trim()
           .toLowerCase();
-        const filteredPets = pets.filter((pet: Pet) => pet.name ? pet.name.toLowerCase().includes(cleanSearchValue) : false);
+        const filteredPets = pets.filter((pet: Pet) => (pet.name ? pet.name.toLowerCase().includes(cleanSearchValue) : false) && pet.status === selectedStatus);
         return of(PetsActions.setFilterResults({searchResults: filteredPets}))
       })
     ));

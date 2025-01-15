@@ -2,7 +2,7 @@
   <h1 class="navbar__title"><mat-icon>pets</mat-icon><span class="navbar__title-text">Pet Store App</span></h1>
   <div class="navbar__theme-switcher">
     <mat-icon class="navbar__theme-switcher-icon">dark_mode</mat-icon>
-    <mat-slide-toggle [checked]="false" (change)="switchTheme($event)"></mat-slide-toggle>
+    <mat-slide-toggle [hideIcon]="true" [checked]="false" (change)="switchTheme($event)"></mat-slide-toggle>
     <mat-icon class="navbar__theme-switcher-icon">light_mode</mat-icon>
   </div>
   <div class="navbar__search-container">

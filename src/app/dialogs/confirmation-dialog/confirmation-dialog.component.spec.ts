@@ -7,7 +7,6 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatChipGrid, MatChipInput, MatChipRow} from "@angular/material/chips";
 import {MockStore, provideMockStore} from "@ngrx/store/testing";
 import {initialState} from "../../../test/test-store";
-import {createPet} from "../../../test/factories/pet-factory";
 
 describe('ConfirmationDialogComponent', () => {
   let component: ConfirmationDialogComponent;
@@ -15,12 +14,12 @@ describe('ConfirmationDialogComponent', () => {
   let store: MockStore;
 
   const dialogData = {
-    pet: createPet({id: 1, name: 'Pet1'})
+    title: `Deleting pet`,
+    text: `Are you sure you want to delete?`,
+    confirmButtonText: 'Yes',
   };
 
   beforeEach(async () => {
-    const closeSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
-
     await TestBed.configureTestingModule({
       declarations: [ConfirmationDialogComponent],
       imports: [
@@ -30,11 +29,16 @@ describe('ConfirmationDialogComponent', () => {
         MatFormFieldModule,
         MatChipRow,
         MatChipGrid,
-        MatChipInput
+        MatChipInput,
       ],
       providers: [
-        { provide: MatDialog },
-        { provide: MatDialogRef, useValue: closeSpy },
+        MatDialog,
+        {provide: MatDialogRef,
+          useValue: {
+            close: () => {},
+            componentInstance: () => {}
+          }
+        },
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
         provideMockStore({initialState}),
       ]
@@ -49,6 +53,16 @@ describe('ConfirmationDialogComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('WHEN confirm method is used THEN it should close the dialog', async () => {
+    spyOn(component.dialogRef, 'close');
+    component.confirm();
+    fixture.detectChanges();
+
+    await fixture.whenStable().then(() => {
+      expect(component.dialogRef.close).toHaveBeenCalled();
+    });
   });
 
   afterAll(() => {

@@ -20,9 +20,9 @@ describe('PetsEffects', () => {
     createPet({id: 1, name: 'Pet1'}),
     createPet({id: 2, name: 'Pet2'}),
   ]
+  const httpSpy = jasmine.createSpyObj('HttpClient', ['get', 'post', 'put', 'delete']);
 
   beforeEach(() => {
-    const httpSpy = jasmine.createSpyObj('HttpClient', ['get', 'post', 'put', 'delete']);
     TestBed.configureTestingModule({
       providers: [
         PetsEffects,
@@ -37,8 +37,6 @@ describe('PetsEffects', () => {
     effects = TestBed.inject(PetsEffects);
     store = TestBed.inject(MockStore);
     httpClient = TestBed.inject(HttpClient);
-    httpSpy.get.and.returnValue(of(petsResponse));
-    httpSpy.delete.and.returnValue(of({ code: 200, type: 'success', message: 1 }));
     store.setState(initialState())
   });
 
@@ -49,6 +47,7 @@ describe('PetsEffects', () => {
   it(`WHEN loadPets action is called THEN petsLoaded and filterPets action should be invoked`, () => {
     const action = PetsActions.loadPets({status: PetStatus.Available});
     actions$ = hot('--a-', { a: action });
+    httpSpy.get.and.returnValue(of(petsResponse));
 
     const completionB = PetsActions.petsLoaded({ pets: petsResponse });
     const completionC = PetsActions.filterPets({searchValue: ''});
@@ -60,6 +59,7 @@ describe('PetsEffects', () => {
   it(`WHEN deletePet action is called THEN petDeleted and filterPets action should be invoked`, () => {
     const action = PetsActions.deletePet({pet: createPet({id: 1, name: 'Pet1'}),});
     actions$ = hot('--a-', { a: action });
+    httpSpy.delete.and.returnValue(of({ code: 200, type: 'success', message: 1 }));
 
     const completionB = PetsActions.petDeleted({ petId: 1 });
     const completionC = PetsActions.filterPets({searchValue: initialState().pets.searchValue});
@@ -74,7 +74,7 @@ describe('PetsEffects', () => {
 
     const completionB = PetsActions.setFilterResults({ searchResults: [createPet({id: 1,  name:'Pet1'})]});
 
-    const expected = cold('--b', { b: completionB, });
+    const expected = cold('--b', { b: completionB });
     expect(effects.filterPets$).toBeObservable(expected);
   });
 });

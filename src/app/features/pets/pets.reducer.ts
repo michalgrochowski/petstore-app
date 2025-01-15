@@ -1,12 +1,13 @@
-import { createReducer, on } from '@ngrx/store';
-import { PetsActions } from './pets.actions';
+import {createReducer, on} from '@ngrx/store';
+import {PetsActions} from './pets.actions';
 import {Pet} from "../../models/pet";
 import {createEntityAdapter, EntityAdapter, EntityState} from "@ngrx/entity";
 import * as _ from 'lodash';
+import {flatten} from 'lodash';
 import {HttpErrorResponse} from "@angular/common/http";
 import {findFirstAvailableId} from "../../helpers/find-first-available-id";
-import {flatten} from "lodash";
 import {findMissingNumbers} from "../../helpers/find-missing-ids";
+import {PetStatus} from "../../enums/pet-status";
 
 export const petsFeatureKey = 'pets';
 
@@ -14,6 +15,7 @@ export interface State {
   pets: EntityState<Pet>,
   filteredPets: Pet[];
   searchValue: string;
+  selectedStatus: PetStatus;
   loadingPets: boolean,
   petsLoaded: boolean,
   petsFailedToLoad: boolean,
@@ -36,6 +38,7 @@ export const initialState: State = {
   pets: adapter.getInitialState(),
   filteredPets: [],
   searchValue: '',
+  selectedStatus: PetStatus.Available,
   loadingPets: false,
   petsLoaded: false,
   petsFailedToLoad: false,
@@ -52,11 +55,12 @@ export const initialState: State = {
 
 export const reducer = createReducer(
   initialState,
-  on(PetsActions.loadPets, (state) => {
+  on(PetsActions.loadPets, (state, action) => {
     return {
       ...state,
       loadingPets: true,
-      petRequestError: null
+      petRequestError: null,
+      selectedStatus: action.status,
     };
   }),
   on(PetsActions.petsLoaded, (state, action) => {

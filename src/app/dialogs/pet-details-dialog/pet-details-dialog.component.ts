@@ -14,7 +14,7 @@ export interface PetDetailsDialogData {
 })
 export class PetDetailsDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: PetDetailsDialogData,
-              private readonly dialogRef: MatDialogRef<PetDetailsDialogComponent>) {
+              readonly dialogRef: MatDialogRef<PetDetailsDialogComponent>) {
   }
 
   dialogTitle = `Details for ${this.data.pet?.name}`;

@@ -19,7 +19,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private readonly unsubscribe$ = new Subject<void>();
 
   constructor(private readonly store$: Store<State>,
-              private readonly dialog: MatDialog,
+              readonly dialog: MatDialog,
               @Inject(DOCUMENT) private document: Document) {
   }
 

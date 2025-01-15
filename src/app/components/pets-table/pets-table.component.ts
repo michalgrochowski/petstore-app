@@ -51,7 +51,7 @@ export class PetsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   availableTagIds$ = this.store$.select('pets', 'availableTagIds').pipe(takeUntil(this.unsubscribe$));
 
   constructor(private readonly store$: Store<State>,
-              private readonly dialog: MatDialog,
+              readonly dialog: MatDialog,
               private readonly snackBar: MatSnackBar) {
   }
 

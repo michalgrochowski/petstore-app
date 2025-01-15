@@ -6,14 +6,14 @@ import {initialState} from "../../../test/test-store";
 import {createPet} from "../../../test/factories/pet-factory";
 import {MatIconModule} from "@angular/material/icon";
 import {MatFormFieldModule, MatLabel} from "@angular/material/form-field";
-import {FormBuilder, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from "@angular/forms";
+import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatChipGrid, MatChipInput, MatChipRow, MatChipsModule} from "@angular/material/chips";
 import {MatInputModule} from "@angular/material/input";
-import {forwardRef} from "@angular/core";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatSelectModule} from "@angular/material/select";
 import {provideAnimationsAsync} from "@angular/platform-browser/animations/async";
 import {provideAnimations} from "@angular/platform-browser/animations";
+import {PetsActions} from "../../features/pets/pets.actions";
 
 describe('AddEditPetComponent', () => {
   let component: AddEditPetDialogComponent;
@@ -21,6 +21,7 @@ describe('AddEditPetComponent', () => {
   let store: MockStore;
   let formBuilder: FormBuilder;
   let snackbar: MatSnackBar;
+  let dispatchSpy: jasmine.Spy;
 
   const dialogData = {
     pet: createPet({id: 1, name: 'Pet1'}),
@@ -69,10 +70,25 @@ describe('AddEditPetComponent', () => {
     formBuilder = TestBed.inject((FormBuilder));
     snackbar = TestBed.inject((MatSnackBar));
     fixture.detectChanges();
+    dispatchSpy = spyOn(store, 'dispatch');
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('Modal methods validation', () => {
+    it('WHEN save method is triggered THEN it should invoke addPet and clearAddedAndDeleted actions', async () => {
+      component.save();
+
+      fixture.detectChanges();
+
+      await fixture.whenStable().then(() => {
+        expect(dispatchSpy).toHaveBeenCalledTimes(2)
+        expect(dispatchSpy).toHaveBeenCalledWith(PetsActions.clearAddedAndDeleted());
+        expect(dispatchSpy).toHaveBeenCalledWith(PetsActions.editPet({pet: createPet({id: 1, name: 'Pet1'})}));
+      });
+    });
   });
 
   afterAll(() => {
